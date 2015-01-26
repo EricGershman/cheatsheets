@@ -1,17 +1,24 @@
-#General Auditd
-Auditd is the Userspace component of the Linux Auditing System.
-
 #Auditd Cheat Sheet 
 ##Commands
 ###auditd
-Run in the foreground:```auditd -f```
-
+```auditd -f``` - foreground auditd, messages go to stderr
+```SIGHUP``` - Reconfigure Auditd, re-read configuration files 
 
 "A boot param of audit=1 should be added to ensure that all processes that run before the audit daemon starts is marked as auditable by the kernel. "
 - [Auditd Man Page] [auditd_man]
 
 ###auditctl
 "auditctl program is used to control the behavior, get status, and add or delete rules into the 2.6 kernel’s audit system."
+
+```auditctl - l``` - List current rule set
+
+####Control Behavior 
+   * ```auditctl -e 0``` - Temporarily disable auditing 
+   * ```auditctl -e 1``` - Re-enable auditing
+   * ```auditctl -e 2``` - Lock auditing to enabled, reboot to change configuration. 
+   * ```auditctl -f 0``` - Do not report critical errors 
+   * ```auditctl -f 1``` - Default, printk critical errors 
+   * ```auditctl -f 2``` - Panic on critical errors 
 - [Auditctl Man Page] [auditctl_man]
 
 ###aureport 
@@ -31,6 +38,8 @@ Run in the foreground:```auditd -f```
 ```bash
 -a always,exit -F arch=b32 -F uid=33 -S execve -k programs -k www
 -a always,exit -F arch=b64 -F uid=33 -S execve -k programs -k www
+-a always,exit -F arch=b32 -C auid!=uid -S execve -k su_program -k programs
+-a always,exit -F arch=b64 -C auid!=uid -S execve -k su_program -k programs
 -a exit,always -S unlink -S rmdir
 -a exit,always -S stime.*
 -a exit,always -S setrlimit.*
@@ -49,3 +58,14 @@ https://github.com/ossec/ossec-hids/blob/6eb2d4dce24688c675de3202f21a925b0b7501f
 [auditd_man]: http://linux.die.net/man/8/auditd  "Auditd Man Page"
 [auditctl_man]: http://linux.die.net/man/8/auditctl  "Auditctl Man Page"
 [audit.rules_man]: http://linux.die.net/man/7/audit.rules  "audit.rules man page"
+http://security.blogoverflow.com/2013/01/a-brief-introduction-to-auditd/
+
+##PCI-DSS
+http://linux-audit.com/category/compliance/pci-dss/
+http://networkrecipes.blogspot.com/2013/03/auditd-in-linux-for-pci-dss-compliance.html
+
+
+##CIS Benchmark
+https://benchmarks.cisecurity.org/tools2/linux/CIS_Red_Hat_Enterprise_Linux_6_Benchmark_v1.1.0.pdf
+http://blog.ptsecurity.com/2010/11/requirement-10-track-and-monitor-all.html
+
