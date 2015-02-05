@@ -59,6 +59,7 @@ https://github.com/ossec/ossec-hids/blob/6eb2d4dce24688c675de3202f21a925b0b7501f
 [auditctl_man]: http://linux.die.net/man/8/auditctl  "Auditctl Man Page"
 [audit.rules_man]: http://linux.die.net/man/7/audit.rules  "audit.rules man page"
 http://security.blogoverflow.com/2013/01/a-brief-introduction-to-auditd/
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/chap-system_auditing.html
 
 ##PCI-DSS
 http://linux-audit.com/category/compliance/pci-dss/
