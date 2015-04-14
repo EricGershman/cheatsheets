@@ -1,4 +1,52 @@
 #Auditd Cheat Sheet 
+##Files
+###/etc/audit/auditd.conf
+
+auditd.conf should be changed based on the importance of log integrity and how long you would like to keep records.
+
+Here are the options that manage log rotation: 
+
+```bash
+flush = INCREMENTAL
+freq = 20
+num_logs = 5
+disp_qos = lossy
+dispatcher = /sbin/audispd
+name_format = NONE
+##name = mydomain
+max_log_file = 6 
+max_log_file_action = ROTATE
+space_left = 75
+```
+
+_action options determine how resilient the system will be to failure:
+
+```bash
+admin_space_left_action = SUSPEND
+disk_full_action = SUSPEND
+disk_error_action = SUSPEND
+```
+
+###/etc/audit/audit.rules
+
+There are a number of compliance example included in ```/usr/share/doc/auditd/examples```
+
+This contains all of the rules that are loaded when the system starts, most rulesets start with: 
+
+```bash
+## First rule - delete all
+-D
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## Set failure mode to panic
+-f 2
+```
+
+Rules can be added here or via the auditctl command. 
+
 ##Commands
 ###auditd
 ```auditd -f``` - foreground auditd, messages go to stderr
@@ -21,8 +69,26 @@
    * ```auditctl -f 2``` - Panic on critical errors 
 - [Auditctl Man Page] [auditctl_man]
 
-###aureport 
-##Setup 
+####Manage Rules
+   * ```auditctl -D``` - Clear all rules
+   * ```auditctl -l``` - List ruleset
+   * ```auditctl -w /file -p rwxa -k file_alert``` - Watch all actions on a file and label with file_alert
+   * ```auditctl -a always,exit -F arch=b32 -F uid=www-data -S execve -k programs -k www``` - Log all commands executed by the www-data user and label with programs and www keywords
+
+###ausearch
+b
+   * ```ausearch -a 104``` - Search for event id 104
+   * ```ausearch --uid 0 --syscall EXECVE --success yes``` - Search for all programs executed by root that were successful 
+   * ```ausearch -ui 0 -sc EXECVE -sv yes``` - Search for all programs executed by root that were successful 
+
+
+
+###aureport
+
+   * ```aureport --auth``` - Authentication Report
+   * ```aureport --login --failed``` - Failed Login Report
+   * ```aureport --file``` - File Report
+
 
 ##Rules
 “audit rules come in 3 varieties: control, file, and syscall”
