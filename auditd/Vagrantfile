@@ -1,0 +1,38 @@
+$bootstrap = <<SCRIPT
+
+groupadd projectx
+useradd -g projectx -d /home/bob -s /bin/bash -p $(echo bobpassword | openssl passwd -1 -stdin) bob
+useradd -g projectx -d /home/mal -s /bin/bash -p $(echo malpassword | openssl passwd -1 -stdin) mal
+rm -rf /projectX/
+mkdir -p /projectX/{bob,mal}
+chown bob:projectx /projectX
+chown bob:projectx /projectX/bob
+chown mal:projectx /projectX/mal
+
+#Setting up Auditd
+/usr/bin/apt-get install auditd -y > /dev/null
+auditctl -D
+auditctl -e 1
+#auditctl -w /projectX/bob -p rwxa -k bobs_files
+
+#Logging in as Bob
+su -c "echo sugar and spice >> /projectX/bob/chemicalX.secret" bob
+su -c "chown bob:projectx /projectX/bob/ -R" bob
+su -c "chmod 777 /projectX/bob/chemicalX.secret -R" bob
+chown bob:projectx /projectX/bob
+
+#rm -rf /projectX/bob/chemicalX.secret
+
+SCRIPT
+
+Vagrant.configure(2) do |config|
+    config.vm.box = "vivid64"
+    config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/vivid/current/vivid-server-cloudimg-amd64-vagrant-disk1.box"
+
+    #Fix provisioning errors from: https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+    #Run bootstrap script
+    config.vm.provision "shell", inline: $bootstrap
+end
+
