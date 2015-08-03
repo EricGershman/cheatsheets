@@ -127,6 +127,22 @@ https://github.com/ossec/ossec-hids/blob/6eb2d4dce24688c675de3202f21a925b0b7501f
 http://security.blogoverflow.com/2013/01/a-brief-introduction-to-auditd/
 https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/chap-system_auditing.html
 
+## Reporting and Alerting Links
+
+
+Splunk: https://splunkbase.splunk.com/app/2642/
+Logstash: https://gist.github.com/artbikes/2313040 
+Logstash: http://serverfault.com/questions/609192/how-to-parse-audit-log-using-logstash 
+ELSA
+
+Bro: https://github.com/set-element/auditdBroFramework
+BroCon ‘15: https://www.bro.org/brocon2015/brocon2015_abstracts.html#looking-for-ghosts-in-themachine 
+
+Ossec
+http://www.ossec.net/files/ossec-hids-2.7-release-note.txt
+https://github.com/ossec/ossec-docs/blob/master/decoders/10_auditd_decoder.xml 
+
+
 ##PCI-DSS
 http://linux-audit.com/category/compliance/pci-dss/
 http://networkrecipes.blogspot.com/2013/03/auditd-in-linux-for-pci-dss-compliance.html
